@@ -1,0 +1,27 @@
+{% extends 'fx_rates_app/base.html' %}
+{% block body_block %}
+
+<h1>
+{% if not form.instance.pk %}
+Create Cash position
+
+{% else %}
+Update Cash position
+{% endif %}
+
+</h1>
+
+<div class="container">
+
+
+<form method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" name="" value="Submit">
+
+
+</form>
+</div>
+
+
+{% endblock %}

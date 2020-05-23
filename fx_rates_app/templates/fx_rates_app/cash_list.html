@@ -1,0 +1,39 @@
+{% extends 'fx_rates_app/base.html' %}
+{% block body_block %}
+{% load mathfilters %}
+{% load humanize %}
+
+
+<div class="container">
+
+<table class="table table-bordered">
+  <thead>
+    <th>Reference</th>
+    <th>Amount</th>
+    <th>Currency</th>
+    <th>Equivalent in GBP</th>
+  </thead>
+
+  {% for item in cash_details %}
+
+  <tr>
+    <td> <a href="{{item.id}}">{{ item.reference }}
+    </td>
+    <td> {{ item.amount|floatformat:0|intcomma }} </td>
+    <td> {{ item.currency }} </td>
+    <td> {{ item.cash_pos_gbp|floatformat:0|intcomma }} </td>
+  </tr>
+
+  {% endfor %}
+
+<tr>
+  <td> Total </td>
+  <td>  </td>
+  <td>  </td>
+  <td> {{total_cash|floatformat:0|intcomma}}</td>
+</tr>
+
+
+
+  {% endblock %}
+  </div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends "fx_rates_app/base.html" %}
+{% block body_block%}
+{%load static %}
+{% load humanize %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Homepage</title>
+  </head>
+  <body>
+    <div class="jumbotron">
+<h1> Summary </h1>
+<!-- {% if total_book %} -->
+<h3> Portfolio book value: {{total_book|floatformat:0|intcomma }} </h3>
+<h3> Portfolio market value: {{total_mark|floatformat:0|intcomma }} </h3>
+<h3> Current gain/loss: {{gain_loss|floatformat:0|intcomma }} </h3>
+<!-- {%endif%} -->
+    </body>
+      {% endblock %}
+</html>

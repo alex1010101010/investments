@@ -1,0 +1,20 @@
+{% extends "fx_rates_app/base.html" %}
+{% block body_block%}
+{% load humanize %}
+
+<div class="jumbotron">
+
+  <h2>Shares details:</h2>
+  <p>Name: {{ shares_detail.name }}</p>
+  <p>Ticker: {{ shares_detail.ticker }}</p>
+  <p>Date: {{ shares_detail.date }}</p>
+  <p>Quantity: {{ shares_detail.quantity|floatformat:0|intcomma  }}</p>
+  <p>Price: {{ shares_detail.price|floatformat:0|intcomma  }}</p>
+  <p>Currency: {{ shares_detail.currency }}</p>
+  <p>Current_Price: {{ shares_detail.current_price|floatformat:0|intcomma  }}</p>
+
+  <a class="btn btn-primary" href="{% url 'fx_rates_app:stock_update' pk=shares_detail.pk %}">Update</a>
+</div>
+
+
+{% endblock %}

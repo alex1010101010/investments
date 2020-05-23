@@ -1,0 +1,23 @@
+{% extends 'fx_rates_app/base.html' %}
+{% block body_block %}
+
+
+{% if not form.instance.pk %}
+<h1>Create Shares position</h1>
+
+{% else %}
+<h1>Update Shares position</h1>
+{% endif %}
+
+<div class="container">
+
+<form method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" name="" value="Submit">
+
+</form>
+
+</div>
+
+{% endblock %}

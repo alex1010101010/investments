@@ -1,0 +1,21 @@
+{% extends "fx_rates_app/base.html" %}
+{% block body_block%}
+{% load humanize %}
+
+<div class="jumbotron">
+
+  <h2>Cash details:</h2>
+  <p>Reference: {{ cash_detail.reference }}</p>
+  <p>Amount: {{ cash_detail.amount|floatformat:0|intcomma  }} </p>
+  <p>Currency: {{ cash_detail.currency }} </p>
+
+  <a class="btn btn-primary" href="{% url 'fx_rates_app:update' pk=cash_detail.pk %}">Update</a>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

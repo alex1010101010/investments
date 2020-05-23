@@ -1,0 +1,22 @@
+{% extends "fx_rates_app/base.html" %}
+{% block body_block%}
+<div class="jumbotron">
+  <h1>Please log in:</h1>
+
+  {% if form.errors %}
+
+  <p>Your username and password didn't match</p>
+
+  {% endif %}
+
+<form action="{% url 'login' %}" method="POST">
+  {% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" class='btn btn-primary' value="Login">
+  <input type="hidden" class="btn btn-primary" value="{{next}}">
+</form>
+
+</div>
+
+
+{% endblock %}

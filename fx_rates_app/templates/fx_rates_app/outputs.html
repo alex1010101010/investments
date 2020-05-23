@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% extends "fx_rates_app/base.html" %}
+    {% block body_block%}
+{%load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+<div class="container">
+
+<body>
+
+<table class="table table-bordered">
+  <thead>
+    <th>Cash</th>
+    <th>Reference</th>
+    <th>Currency</th>
+  </thead>
+
+  {% for x in Cash %}
+  <tr>
+    <td> EUR/GBP </td>
+    <td>{{ x.reference }}</td>
+    <td>{{ x.amount }}</td>
+
+  </tr>
+
+  <form method="POST">
+  {{ form.as_p }}
+  {% csrf_token %}
+</form>
+
+
+  {% endfor %}
+      </div>
+  </body>
+      {% endblock %}
+      </div>
+</html>

@@ -1,0 +1,61 @@
+{% extends 'fx_rates_app/base.html' %}
+{% block body_block %}
+{% load mathfilters %}
+{% load humanize %}
+
+<div class="container">
+
+<table class="table table-bordered">
+  <thead>
+    <th>Name</th>
+    <th>Ticker</th>
+    <th>Date</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Currency</th>
+    <th>Book value</th>
+    <th>Book value in GBP</th>
+    <th>Current price</th>
+    <th>Market value</th>
+    <th>Market value in GBP</th>
+  </thead>
+
+  <form method="post" action="/fx_rates_app/update_shares_list/">
+    {% csrf_token %}
+    <button> Refresh</button>
+  </form>
+  {% for item in shares_details %}
+    <tr>
+      <td> <a href="{{item.id}}">{{ item.name }} </td>
+      <td> {{ item.ticker }} </td>
+      <td> {{ item.date }} </td>
+      <td> {{ item.quantity|floatformat:0|intcomma }} </td>
+      <td> {{ item.price }} </td>
+      <td> {{ item.currency }} </td>
+      <td> {{ item.book_value|floatformat:0|intcomma }} </td>
+      <td> {{ item.stock_book_gbp|floatformat:0|intcomma}} </td>
+      <td> {{ item.current_price }} </td>
+      <td> {{ item.market_value|floatformat:0|intcomma }} </td>
+      <td> {{ item.stock_mark_gbp|floatformat:0|intcomma}} </td>
+    </tr>
+   {% endfor %}
+
+
+
+
+  <tr>
+    <td> Total </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>{{tot_book_gbp|floatformat:0|intcomma}}</td>
+    <td>  </td>
+    <td>  </td>
+    <td>{{tot_mark_gbp|floatformat:0|intcomma}}</td>
+  </tr>
+
+  {% endblock %}
+  </div>

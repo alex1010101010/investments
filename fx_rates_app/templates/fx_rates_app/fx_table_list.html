@@ -1,0 +1,47 @@
+{% extends "fx_rates_app/base.html" %}
+{% block body_block%}
+{% load humanize %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+<div class="container">
+
+
+<h1>This is the page for FX rates</h1>
+
+ <a href="/fx_rates_app/update/"><button> Refresh</button></a>
+
+<body>
+
+<table class="table table-bordered">
+  <thead>
+    <th>Currency</th>
+    <th>FX rate</th>
+    <th>Date and time</th>
+  </thead>
+
+  {% for acc in object_list %}
+    <tr>
+    <td> EUR/GBP </td>
+    <td>{{ acc.eur_to_gbp|floatformat:3}}</td>
+    <td>{{ acc.date_time }}</td>
+
+  </tr>
+  <tr>
+    <td> AUD/GBP </td>
+    <td>{{ acc.aud_to_gbp|floatformat:3}}</td>
+    <td>{{ acc.date_time }}</td>
+
+  </tr>
+  <tr>
+    <td> USD/GBP </td>
+    <td>{{ acc.usd_to_gbp|floatformat:3}}</td>
+    <td>{{ acc.date_time }}</td>
+
+  </tr>
+  {% endfor %}
+      </div>
+  </body>
+      {% endblock %}
+      </div>
+</html>
