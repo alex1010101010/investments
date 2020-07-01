@@ -25,35 +25,50 @@ class index(TemplateView):
     template_name = 'fx_rates_app/index.html'
     def get_context_data(self,**kwargs):
         context  = super().get_context_data(**kwargs)
-        latest_fx = fx_table.objects.last()
-        total_cash_book = Cash.objects.annotate(amount_in_gbp=Case(
-                When(currency="AUD", then=F('amount')/latest_fx.aud_to_gbp),
-                When(currency="USD", then=F('amount')/latest_fx.usd_to_gbp),
-                When(currency="EUR", then=F('amount')/latest_fx.eur_to_gbp),
-                default=F('amount'),
-                output_field=FloatField()
-            )
-        ).aggregate(sum=Sum('amount_in_gbp'))['sum']
-        total_share_book = Shares.objects.annotate(amount_in_gbp=Case(
-                When(currency="AUD", then=F('price')*F('quantity')/latest_fx.aud_to_gbp),
-                When(currency="USD", then=F('price')*F('quantity')/latest_fx.usd_to_gbp),
-                When(currency="EUR", then=F('price')*F('quantity')/latest_fx.eur_to_gbp),
-                default=F('price')*F('quantity'),
-                output_field=FloatField()
-            )
-        ).aggregate(sum=Sum('amount_in_gbp'))['sum']
 
-        total_share_mark = Shares.objects.annotate(each_mark=Case(
-                When(currency="AUD", then=F('current_price')*F('quantity')/latest_fx.aud_to_gbp),
-                When(currency="USD", then=F('current_price')*F('quantity')/latest_fx.usd_to_gbp),
-                When(currency="EUR", then=F('current_price')*F('quantity')/latest_fx.eur_to_gbp),
-                default=F('current_price')*F('quantity'),
-                output_field=FloatField()
-            )
-        ).aggregate(sum=Sum('each_mark'))['sum']
+        latest_fx = fx_table.objects.all().last()
+        
+        total_cash_book = 0
+        total_share_book = 0
+        total_share_mark = 0
+
+        if latest_fx: # if fx_table is empty the latest will be None, so this condition will avoid any errors
+
+            # there is a problem here, the following 3 variables return back with None
+            # so when you try to do some operations on them in the lines [72-74]
+            # it results in an error, cuz you can't do (None+None)
+            # try to do some debugging to catch where this issue is coming from.
+            total_cash_book = Cash.objects.annotate(amount_in_gbp=Case(
+                    When(currency="AUD", then=F('amount')/latest_fx.aud_to_gbp),
+                    When(currency="USD", then=F('amount')/latest_fx.usd_to_gbp),
+                    When(currency="EUR", then=F('amount')/latest_fx.eur_to_gbp),
+                    default=F('amount'),
+                    output_field=FloatField()
+                )
+            ).aggregate(sum=Sum('amount_in_gbp'))['sum']
+            total_share_book = Shares.objects.annotate(amount_in_gbp=Case(
+                    When(currency="AUD", then=F('price')*F('quantity')/latest_fx.aud_to_gbp),
+                    When(currency="USD", then=F('price')*F('quantity')/latest_fx.usd_to_gbp),
+                    When(currency="EUR", then=F('price')*F('quantity')/latest_fx.eur_to_gbp),
+                    default=F('price')*F('quantity'),
+                    output_field=FloatField()
+                )
+            ).aggregate(sum=Sum('amount_in_gbp'))['sum']
+
+            total_share_mark = Shares.objects.annotate(each_mark=Case(
+                    When(currency="AUD", then=F('current_price')*F('quantity')/latest_fx.aud_to_gbp),
+                    When(currency="USD", then=F('current_price')*F('quantity')/latest_fx.usd_to_gbp),
+                    When(currency="EUR", then=F('current_price')*F('quantity')/latest_fx.eur_to_gbp),
+                    default=F('current_price')*F('quantity'),
+                    output_field=FloatField()
+                )
+            ).aggregate(sum=Sum('each_mark'))['sum']
+
+        # after you solve the above problem, there is no need for the following 3 lines
+        total_cash_book = total_cash_book or 0
         total_share_book = total_share_book or 0
         total_share_mark = total_share_mark or 0
-        total_cash_book = total_cash_book or 0
+
         context['total_book'] = total_cash_book + total_share_book
         context['total_mark'] = total_cash_book + total_share_mark
         context['gain_loss'] = (total_cash_book + total_share_mark)-(total_cash_book + total_share_book)

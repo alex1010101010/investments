@@ -12,7 +12,7 @@ class fx_table(models.Model):
     aud_to_gbp = models.FloatField(default=0)
     usd_to_gbp = models.FloatField(default=0)
 
-    date_time = models.CharField(max_length=264,unique=True,default='')
+    date_time = models.DateTimeField(max_length=264,unique=True,default='')
 
 
 class Cash(models.Model):
